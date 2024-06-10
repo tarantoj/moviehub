@@ -29,5 +29,16 @@
           ];
         };
     });
+    packages = forEachSupportedSystem ({pkgs}: rec {
+      default = pkgs.callPackage ./package.nix {};
+      dockerImage = pkgs.dockerTools.buildLayeredImage {
+        name = "moviehub";
+        tag = "latest";
+        contents = [default];
+        config = {
+          Cmd = ["${default}/bin/MovieHub.Api"];
+        };
+      };
+    });
   };
 }

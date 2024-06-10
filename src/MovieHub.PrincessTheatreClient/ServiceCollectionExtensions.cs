@@ -9,11 +9,12 @@ public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddPrincessTheatreClient(this IServiceCollection services, string configSectionPath = "PrincessTheatreClient")
     {
+        services.AddTransient<DistributedCacheDelegatingHandler>();
+
         services.AddOptions<PrincessTheatreClientOptions>()
                 .BindConfiguration(configSectionPath)
                 .ValidateDataAnnotations()
                 .ValidateOnStart();
-
 
         services.AddHttpClient<IPrincessTheatreService, PrincessTheatreService>()
                 .AddPolicyHandler(HttpPolicyExtensions.HandleTransientHttpError()
@@ -21,7 +22,8 @@ public static class ServiceCollectionExtensions
                 .WaitAndRetryAsync(Backoff.AwsDecorrelatedJitterBackoff(
                     minDelay: TimeSpan.FromMilliseconds(10),
                     maxDelay: TimeSpan.FromMilliseconds(100),
-                    retryCount: 5)));
+                    retryCount: 5)))
+                .AddHttpMessageHandler<DistributedCacheDelegatingHandler>();
 
 
         return services;

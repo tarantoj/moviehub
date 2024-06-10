@@ -12,7 +12,7 @@ public interface IPrincessTheatreService
 public class PrincessTheatreService : IPrincessTheatreService
 {
     private readonly HttpClient _httpClient;
-    private readonly JsonSerializerOptions jsonSerializerOptions = new JsonSerializerOptions
+    private readonly JsonSerializerOptions jsonSerializerOptions = new()
     {
         PropertyNameCaseInsensitive = true
     };
@@ -24,8 +24,8 @@ public class PrincessTheatreService : IPrincessTheatreService
         _httpClient.DefaultRequestHeaders.Add("x-api-key", options.Value.ApiKey);
     }
 
-    public Task<MovieResponse?> GetMovieResponse(FilmProvider filmProvider)
-    {
-        return _httpClient.GetFromJsonAsync<MovieResponse>($"/api/v2/{filmProvider.ToString().ToLowerInvariant()}/movies", jsonSerializerOptions);
-    }
+    public Task<MovieResponse?> GetMovieResponse(FilmProvider filmProvider) =>
+      _httpClient.GetFromJsonAsync<MovieResponse>(
+          $"/api/v2/{filmProvider.ToString().ToLowerInvariant()}/movies",
+          jsonSerializerOptions);
 }

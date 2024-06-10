@@ -9,19 +9,48 @@ namespace MovieHub.Api.Controllers;
 [Route("[controller]")]
 public class ReviewController(ILogger<ReviewController> logger, MovieHubContext movieHubContext) : ControllerBase
 {
-    /*[HttpPost]*/
-    /*public async Task<ActionResult> Create([FromBody] ReviewDto review)*/
-    /*{*/
-    /*    var savedReview = await movieHubContext.Reviews.AddAsync(mapper.Map<Review>(review));*/
-    /**/
-    /*    await movieHubContext.SaveChangesAsync();*/
-    /**/
-    /*    return CreatedAtAction(nameof(Get), new { savedReview.Entity.Id }, savedReview.Entity);*/
-    /*}*/
-    /**/
-    /*[HttpGet("{id}")]*/
-    /*public Task<ReviewDto> Get(int id)*/
-    /*{*/
-    /*    return mapper.ProjectTo<ReviewDto>(movieHubContext.Reviews.Where(r => r.Id == id)).SingleAsync();*/
-    /*}*/
+    [HttpPost]
+    public async Task<ActionResult> Create([FromBody] ReviewDto review)
+    {
+        var savedReview = await movieHubContext.Reviews.AddAsync(new Review
+        {
+            Comment = review.Comment,
+            MovieId = review.MovieId,
+            ReviewDate = review.ReviewDate,
+            Score = review.Score
+        });
+
+        await movieHubContext.SaveChangesAsync();
+
+        return CreatedAtAction(nameof(Get), new { savedReview.Entity.Id }, new ReviewDto
+        {
+            Id = savedReview.Entity.Id,
+            MovieId = savedReview.Entity.MovieId,
+            ReviewDate = savedReview.Entity.ReviewDate,
+            Score = savedReview.Entity.Score,
+            Comment = savedReview.Entity.Comment
+        });
+    }
+
+    [HttpGet("{id}")]
+    public async Task<ActionResult<ReviewDto>> Get(int id)
+    {
+        var review = await movieHubContext.Reviews
+          .Select(r => new ReviewDto
+          {
+              Id = r.Id,
+              MovieId = r.MovieId,
+              ReviewDate = r.ReviewDate,
+              Score = r.Score,
+              Comment = r.Comment
+          })
+          .FirstOrDefaultAsync(r => r.Id == id);
+
+        if (review is null)
+        {
+            return NotFound();
+        }
+
+        return Ok(review);
+    }
 }

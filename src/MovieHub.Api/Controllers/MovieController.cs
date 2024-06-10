@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Caching.Distributed;
 using MovieHub.Api.Models;
 using MovieHub.Database;
 using MovieHub.PrincessTheatreClient;
@@ -12,16 +11,14 @@ namespace MovieHub.Api.Controllers;
 public class MovieController(
     ILogger<MovieController> logger,
     MovieHubContext movieHubContext,
-    IPrincessTheatreService princessTheatreService,
-    IDistributedCache cache) : ControllerBase
+    IPrincessTheatreService princessTheatreService) : ControllerBase
 {
     [HttpGet]
     public ActionResult<IAsyncEnumerable<MovieDto>> Get([FromQuery] string? title, [FromQuery] HashSet<string>? genres = null)
     {
-        logger.LogInformation("Getting movies with title matching {Title} and genres matching {@Genres}", title, genres);
+        logger.LogInformation("Getting movies with title matching {Title} and genres matching {Genres}", title, genres);
 
         var movies = movieHubContext.Movies.AsNoTracking()
-            .Include(x => x.Reviews)
             .Where(x => string.IsNullOrEmpty(title) || x.Title.Contains(title))
             .Where(x => genres == null || genres.Count() == 0 || genres.Any(g => x.Genre.Contains(g)))
             .Select(x => new
@@ -51,15 +48,11 @@ public class MovieController(
     [HttpGet("details")]
     public async Task<ActionResult<IEnumerable<MovieDetailsDto>>> GetMovieDetails()
     {
-        var cinemaWorldPrices = await cache.GetOrCreate(
-            FilmProvider.CinemaWorld.ToString(),
-            async () => (await princessTheatreService.GetMovieResponse(FilmProvider.CinemaWorld))?.Movies ?? []);
+        var cinemaWorldPrices = (await princessTheatreService.GetMovieResponse(FilmProvider.CinemaWorld))?.Movies ?? [];
 
-        var filmWorldPrices = await cache.GetOrCreate(FilmProvider.FilmWorld.ToString(), async () => (await princessTheatreService.GetMovieResponse(FilmProvider.FilmWorld))?.Movies ?? []);
+        var filmWorldPrices = (await princessTheatreService.GetMovieResponse(FilmProvider.FilmWorld))?.Movies ?? [];
 
         var movies = movieHubContext.Movies.AsNoTracking()
-          .Include(m => m.Showings)
-          .ThenInclude(s => s.Cinema)
           .Select(movie => new
           {
               movie.Title,
@@ -87,12 +80,5 @@ public class MovieController(
           });
 
         return Ok(movies);
-    }
-
-    [HttpGet("test")]
-    public async Task<ActionResult<MovieResponse>> GetTest()
-    {
-        var prices = await princessTheatreService.GetMovieResponse(FilmProvider.CinemaWorld);
-        return Ok(prices);
     }
 }
