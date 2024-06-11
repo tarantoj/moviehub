@@ -1,11 +1,16 @@
 {
   description = "A Nix-flake-based C# development environment";
 
-  inputs.nixpkgs.url = "github:nixos/nixpkgs/nixos-23.11";
+  inputs.nixpkgs.url = "github:nixos/nixpkgs/nixos-24.05";
+  inputs.pre-commit-hooks = {
+    url = "github:cachix/pre-commit-hooks.nix";
+    inputs.nixpkgs.follows = "nixpkgs";
+  };
 
   outputs = {
     self,
     nixpkgs,
+    pre-commit-hooks,
   }: let
     supportedSystems = ["x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin"];
     forEachSupportedSystem = f:
@@ -36,7 +41,16 @@
         tag = "latest";
         contents = [default];
         config = {
-          Cmd = ["${default}/bin/MovieHub.Api"];
+          Entrypoint = ["${default}/bin/MovieHub.Api"];
+          Env = [
+            "ConnectionStrings__MovieHubDatabase=Data Source=MovieHub.sqlite"
+            "ConnectionStrings__Cache=cache.sqlite"
+          ];
+          WorkingDir = "/var/lib/moviehub";
+          Volumes = {
+            "/var/lib/moviehub/MovieHub.sqlite" = {};
+            "/var/lib/moviehub/cache.sqlite" = {};
+          };
         };
       };
     });
