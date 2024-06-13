@@ -43,8 +43,8 @@
         config = {
           Entrypoint = ["${default}/bin/MovieHub.Api"];
           Env = [
-            "ConnectionStrings__MovieHubDatabase=Data Source=MovieHub.sqlite"
-            "ConnectionStrings__Cache=cache.sqlite"
+            "ConnectionStrings__MovieHubDatabase=Data Source=/var/lib/moviehub/MovieHub.sqlite"
+            "ConnectionStrings__Cache=/var/lib/moviehub/cache.sqlite"
           ];
           WorkingDir = "/var/lib/moviehub";
           Volumes = {
