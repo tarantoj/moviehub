@@ -6,6 +6,7 @@ using MovieHub.PrincessTheatreClient;
 using NeoSmart.Caching.Sqlite.AspNetCore;
 
 [assembly: ApiConventionType(typeof(DefaultApiConventions))]
+
 internal class Program
 {
     private static void Main(string[] args)
@@ -13,7 +14,8 @@ internal class Program
         var builder = WebApplication.CreateBuilder(args);
 
         // Add services to the container.
-        builder.Services.AddSqliteCache(builder.Configuration.GetConnectionString("Cache") ?? "./cache.sqlite");
+        builder.Services.AddSqliteCache(
+            builder.Configuration.GetConnectionString("Cache") ?? "./cache.sqlite");
         builder.Services.AddControllers();
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
@@ -36,10 +38,7 @@ internal class Program
             options.UseSqlite(builder.Configuration.GetConnectionString("MovieHubDatabase"));
         });
 
-        if (builder.Environment.IsDevelopment())
-        {
-            builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-        }
+        if (builder.Environment.IsDevelopment()) builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
         builder.Services.AddPrincessTheatreClient();
 

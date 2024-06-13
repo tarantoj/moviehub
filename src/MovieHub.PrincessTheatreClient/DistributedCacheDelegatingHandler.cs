@@ -27,7 +27,7 @@ public class DistributedCacheDelegatingHandler(
 
             return new HttpResponseMessage
             {
-                Content = new ByteArrayContent(cached),
+                Content = new ByteArrayContent(cached)
             };
         }
 
@@ -46,7 +46,8 @@ public class DistributedCacheDelegatingHandler(
             responseContent,
             new DistributedCacheEntryOptions
             {
-                AbsoluteExpirationRelativeToNow = response.Headers.CacheControl?.MaxAge ?? TimeSpan.FromHours(1),
+                AbsoluteExpirationRelativeToNow =
+                    response.Headers.CacheControl?.MaxAge ?? TimeSpan.FromHours(1)
             },
             cancellationToken);
 

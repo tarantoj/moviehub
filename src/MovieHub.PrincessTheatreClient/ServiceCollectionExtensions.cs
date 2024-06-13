@@ -1,3 +1,4 @@
+using System.Net;
 using Microsoft.Extensions.DependencyInjection;
 using Polly;
 using Polly.Contrib.WaitAndRetry;
@@ -7,23 +8,24 @@ namespace MovieHub.PrincessTheatreClient;
 
 public static class ServiceCollectionExtensions
 {
-    public static IServiceCollection AddPrincessTheatreClient(this IServiceCollection services, string configSectionPath = "PrincessTheatreClient")
+    public static IServiceCollection AddPrincessTheatreClient(this IServiceCollection services,
+        string configSectionPath = "PrincessTheatreClient")
     {
         services.AddTransient<DistributedCacheDelegatingHandler>();
 
         services.AddOptions<PrincessTheatreClientOptions>()
-                .BindConfiguration(configSectionPath)
-                .ValidateDataAnnotations()
-                .ValidateOnStart();
+            .BindConfiguration(configSectionPath)
+            .ValidateDataAnnotations()
+            .ValidateOnStart();
 
         services.AddHttpClient<IPrincessTheatreService, PrincessTheatreService>()
-                .AddPolicyHandler(HttpPolicyExtensions.HandleTransientHttpError()
-                .OrResult(msg => msg.StatusCode == System.Net.HttpStatusCode.NotFound)
+            .AddPolicyHandler(HttpPolicyExtensions.HandleTransientHttpError()
+                .OrResult(msg => msg.StatusCode == HttpStatusCode.NotFound)
                 .WaitAndRetryAsync(Backoff.AwsDecorrelatedJitterBackoff(
-                    minDelay: TimeSpan.FromMilliseconds(10),
-                    maxDelay: TimeSpan.FromMilliseconds(100),
-                    retryCount: 5)))
-                .AddHttpMessageHandler<DistributedCacheDelegatingHandler>();
+                    TimeSpan.FromMilliseconds(10),
+                    TimeSpan.FromMilliseconds(100),
+                    5)))
+            .AddHttpMessageHandler<DistributedCacheDelegatingHandler>();
 
 
         return services;

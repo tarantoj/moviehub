@@ -12,6 +12,7 @@ public interface IPrincessTheatreService
 public class PrincessTheatreService : IPrincessTheatreService
 {
     private readonly HttpClient _httpClient;
+
     private readonly JsonSerializerOptions jsonSerializerOptions = new()
     {
         PropertyNameCaseInsensitive = true
@@ -25,7 +26,7 @@ public class PrincessTheatreService : IPrincessTheatreService
     }
 
     public Task<MovieResponse?> GetMovieResponse(FilmProvider filmProvider) =>
-      _httpClient.GetFromJsonAsync<MovieResponse>(
-          $"/api/v2/{filmProvider.ToString().ToLowerInvariant()}/movies",
-          jsonSerializerOptions);
+        _httpClient.GetFromJsonAsync<MovieResponse>(
+            $"/api/v2/{filmProvider.ToString().ToLowerInvariant()}/movies",
+            jsonSerializerOptions);
 }

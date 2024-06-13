@@ -14,9 +14,11 @@ public class MovieController(
     IPrincessTheatreService princessTheatreService) : ControllerBase
 {
     [HttpGet]
-    public ActionResult<IAsyncEnumerable<MovieDto>> Get([FromQuery] string? title, [FromQuery] HashSet<string>? genres = null)
+    public ActionResult<IAsyncEnumerable<MovieDto>> Get([FromQuery] string? title,
+        [FromQuery] HashSet<string>? genres = null)
     {
-        logger.LogInformation("Getting movies with title matching {Title} and genres matching {Genres}", title, genres);
+        logger.LogInformation("Getting movies with title matching {Title} and genres matching {Genres}",
+            title, genres);
 
         var movies = movieHubContext.Movies.AsNoTracking()
             .Where(x => string.IsNullOrEmpty(title) || x.Title.Contains(title))
@@ -48,36 +50,40 @@ public class MovieController(
     [HttpGet("details")]
     public async Task<ActionResult<IEnumerable<MovieDetailsDto>>> GetMovieDetails()
     {
-        var cinemaWorldPrices = (await princessTheatreService.GetMovieResponse(FilmProvider.CinemaWorld))?.Movies ?? [];
+        var cinemaWorldPrices =
+            (await princessTheatreService.GetMovieResponse(FilmProvider.CinemaWorld))?.Movies ?? [];
 
-        var filmWorldPrices = (await princessTheatreService.GetMovieResponse(FilmProvider.FilmWorld))?.Movies ?? [];
+        var filmWorldPrices =
+            (await princessTheatreService.GetMovieResponse(FilmProvider.FilmWorld))?.Movies ?? [];
 
         var movies = movieHubContext.Movies.AsNoTracking()
-          .Select(movie => new
-          {
-              movie.Title,
-              Showings = movie.Showings.Select(s => new ShowingsDto { TicketPrice = s.TicketPrice, Showtime = s.Showtime, CinemaName = s.Cinema.Name }),
-              movie.Synopsis,
-              movie.Runtime,
-              movie.ReleaseDate,
-              movie.Director,
-              movie.Genre,
-              movie.Rating,
-              movie.PrincessTheatreMovieId
-          }).AsAsyncEnumerable()
-          .Select(movie => new MovieDetailsDto
-          {
-              Title = movie.Title,
-              Showings = movie.Showings,
-              Synopsis = movie.Synopsis,
-              Runtime = movie.Runtime,
-              ReleaseDate = movie.ReleaseDate,
-              Director = movie.Director,
-              Genre = movie.Genre,
-              Rating = movie.Rating,
-              FilmWorldPrice = filmWorldPrices.Single(p => p.Id.Id == movie.PrincessTheatreMovieId).Price,
-              CinemaWorldPrice = cinemaWorldPrices.Single(p => p.Id.Id == movie.PrincessTheatreMovieId).Price
-          });
+            .Select(movie => new
+            {
+                movie.Title,
+                Showings = movie.Showings.Select(s => new ShowingsDto
+                    { TicketPrice = s.TicketPrice, Showtime = s.Showtime, CinemaName = s.Cinema.Name }),
+                movie.Synopsis,
+                movie.Runtime,
+                movie.ReleaseDate,
+                movie.Director,
+                movie.Genre,
+                movie.Rating,
+                movie.PrincessTheatreMovieId
+            }).AsAsyncEnumerable()
+            .Select(movie => new MovieDetailsDto
+            {
+                Title = movie.Title,
+                Showings = movie.Showings,
+                Synopsis = movie.Synopsis,
+                Runtime = movie.Runtime,
+                ReleaseDate = movie.ReleaseDate,
+                Director = movie.Director,
+                Genre = movie.Genre,
+                Rating = movie.Rating,
+                FilmWorldPrice = filmWorldPrices.Single(p => p.Id.Id == movie.PrincessTheatreMovieId).Price,
+                CinemaWorldPrice = cinemaWorldPrices.Single(p => p.Id.Id == movie.PrincessTheatreMovieId)
+                    .Price
+            });
 
         return Ok(movies);
     }
