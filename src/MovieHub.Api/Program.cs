@@ -15,17 +15,14 @@ internal class Program
 
         // Add services to the container.
         builder.Services.AddSqliteCache(
-            builder.Configuration.GetConnectionString("Cache") ?? "./cache.sqlite");
+            builder.Configuration.GetConnectionString("Cache") ?? "./cache.sqlite"
+        );
         builder.Services.AddControllers();
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen(options =>
         {
-            options.MapType<DateOnly>(() => new OpenApiSchema
-            {
-                Type = "string",
-                Format = "date"
-            });
+            options.MapType<DateOnly>(() => new OpenApiSchema { Type = "string", Format = "date" });
         });
         builder.Services.AddDbContext<MovieHubContext>(options =>
         {
@@ -38,7 +35,8 @@ internal class Program
             options.UseSqlite(builder.Configuration.GetConnectionString("MovieHubDatabase"));
         });
 
-        if (builder.Environment.IsDevelopment()) builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+        if (builder.Environment.IsDevelopment())
+            builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
         builder.Services.AddPrincessTheatreClient();
 

@@ -46,7 +46,8 @@ public class Seeder
         new()
         {
             Movie = Movies.First(m => m.Title == "Star Wars: The Phantom Menace (Episode I)"),
-            Cinema = Cinemas.First(c => c.Name == "Cinemarvel"), TicketPrice = 24.5m,
+            Cinema = Cinemas.First(c => c.Name == "Cinemarvel"),
+            TicketPrice = 24.5m,
             Showtime = DateOnly.FromDateTime(new DateTime(2024, 12, 31))
         }
     };

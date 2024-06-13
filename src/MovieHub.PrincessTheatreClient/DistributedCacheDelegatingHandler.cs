@@ -5,11 +5,13 @@ namespace MovieHub.PrincessTheatreClient;
 
 public class DistributedCacheDelegatingHandler(
     IDistributedCache? cache,
-    ILogger<DistributedCacheDelegatingHandler> logger) : DelegatingHandler
+    ILogger<DistributedCacheDelegatingHandler> logger
+) : DelegatingHandler
 {
     protected override async Task<HttpResponseMessage> SendAsync(
         HttpRequestMessage request,
-        CancellationToken cancellationToken)
+        CancellationToken cancellationToken
+    )
     {
         if (cache is null || request.Method != HttpMethod.Get || request.RequestUri is null)
         {
@@ -25,10 +27,7 @@ public class DistributedCacheDelegatingHandler(
         {
             logger.LogInformation("Returning cached response for {Key}", key);
 
-            return new HttpResponseMessage
-            {
-                Content = new ByteArrayContent(cached)
-            };
+            return new HttpResponseMessage { Content = new ByteArrayContent(cached) };
         }
 
         var response = await base.SendAsync(request, cancellationToken);
@@ -49,7 +48,8 @@ public class DistributedCacheDelegatingHandler(
                 AbsoluteExpirationRelativeToNow =
                     response.Headers.CacheControl?.MaxAge ?? TimeSpan.FromHours(1)
             },
-            cancellationToken);
+            cancellationToken
+        );
 
         return response;
     }

@@ -15,7 +15,8 @@ namespace MovieHub.Database.Migrations
                 name: "Reviews",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                    Id = table
+                        .Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Score = table.Column<decimal>(type: "TEXT", precision: 4, scale: 2, nullable: false),
                     Comment = table.Column<string>(type: "TEXT", nullable: false),
@@ -30,20 +31,18 @@ namespace MovieHub.Database.Migrations
                         column: x => x.MovieId,
                         principalTable: "Movies",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
+                        onDelete: ReferentialAction.Cascade
+                    );
+                }
+            );
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Reviews_MovieId",
-                table: "Reviews",
-                column: "MovieId");
+            migrationBuilder.CreateIndex(name: "IX_Reviews_MovieId", table: "Reviews", column: "MovieId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "Reviews");
+            migrationBuilder.DropTable(name: "Reviews");
         }
     }
 }

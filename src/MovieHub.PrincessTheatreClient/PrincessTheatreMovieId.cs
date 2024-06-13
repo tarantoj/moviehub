@@ -20,7 +20,6 @@ public readonly struct PrincessTheatreMovieId
         Id = match.Groups["Id"].Value;
     }
 
-
     public override string ToString() => $"{FilmProviderToString(FilmProvider)}{Id}";
 
     private static string FilmProviderToString(FilmProvider filmProvider) =>
@@ -28,8 +27,12 @@ public readonly struct PrincessTheatreMovieId
         {
             FilmProvider.FilmWorld => "fw",
             FilmProvider.CinemaWorld => "cw",
-            _ => throw new InvalidEnumArgumentException(nameof(filmProvider), (int)filmProvider,
-                typeof(FilmProvider))
+            _
+                => throw new InvalidEnumArgumentException(
+                    nameof(filmProvider),
+                    (int)filmProvider,
+                    typeof(FilmProvider)
+                )
         };
 
     private static FilmProvider FilmProviderFromString(string filmProvider) =>
@@ -37,7 +40,11 @@ public readonly struct PrincessTheatreMovieId
         {
             "fw" => FilmProvider.FilmWorld,
             "cw" => FilmProvider.CinemaWorld,
-            _ => throw new ArgumentOutOfRangeException(nameof(filmProvider), filmProvider,
-                "Invalid film Provider id prefix")
+            _
+                => throw new ArgumentOutOfRangeException(
+                    nameof(filmProvider),
+                    filmProvider,
+                    "Invalid film Provider id prefix"
+                )
         };
 }
