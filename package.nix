@@ -4,7 +4,7 @@
   ...
 }:
 buildDotnetModule {
-  pname = "MovieHub";
+  pname = "MovieHub.Api";
   version = "0.0.1";
   src = ./src;
   projectFile = "./MovieHub.Api/MovieHub.Api.csproj";
