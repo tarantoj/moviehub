@@ -5,16 +5,16 @@ using System.Text.RegularExpressions;
 namespace MovieHub.PrincessTheatreClient;
 
 [JsonConverter(typeof(PrincessTheatreMovieIdConverter))]
-public readonly struct PrincessTheatreMovieId
+public readonly partial struct PrincessTheatreMovieId
 {
+
     public FilmProvider FilmProvider { get; }
     public string Id { get; }
 
     public PrincessTheatreMovieId(string princessTheatreMovieId)
     {
-        var pattern = @"(?<FilmProvider>[a-z]{2})(?<Id>\d+)";
 
-        var match = Regex.Match(princessTheatreMovieId, pattern);
+        var match = IdPattern().Match(princessTheatreMovieId);
 
         FilmProvider = FilmProviderFromString(match.Groups["FilmProvider"].Value);
         Id = match.Groups["Id"].Value;
@@ -47,4 +47,7 @@ public readonly struct PrincessTheatreMovieId
                     "Invalid film Provider id prefix"
                 )
         };
+
+    [GeneratedRegex(@"(?<FilmProvider>[a-z]{2})(?<Id>\d+)")]
+    private static partial Regex IdPattern();
 }
