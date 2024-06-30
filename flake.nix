@@ -28,9 +28,6 @@
           DOTNET_ROOT = "${dotnet-combined}";
           packages = with pkgs; [
             dotnet-combined
-            # omnisharp-roslyn
-            # mono
-            # msbuild
           ];
         };
     });
