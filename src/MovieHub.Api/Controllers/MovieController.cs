@@ -29,7 +29,7 @@ public class MovieController(
         var movies = movieHubContext
             .Movies.AsNoTracking()
             .Where(x => string.IsNullOrEmpty(title) || x.Title.Contains(title))
-            .Where(x => genres == null || genres.Count() == 0 || genres.Any(g => x.Genre.Contains(g)))
+            .Where(x => genres == null || genres.Count == 0 || genres.Any(g => x.Genre.Contains(g)))
             .Select(x => new
             {
                 x.Id,
