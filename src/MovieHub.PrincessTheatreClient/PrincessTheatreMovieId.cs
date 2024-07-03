@@ -48,6 +48,6 @@ public readonly partial struct PrincessTheatreMovieId
                 )
         };
 
-    [GeneratedRegex(@"(?<FilmProvider>[a-z]{2})(?<Id>\d+)")]
+    [GeneratedRegex(@"(?<FilmProvider>fw|cw)(?<Id>\d+)")]
     private static partial Regex IdPattern();
 }
