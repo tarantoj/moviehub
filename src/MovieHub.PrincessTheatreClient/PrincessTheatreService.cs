@@ -4,11 +4,6 @@ using Microsoft.Extensions.Options;
 
 namespace MovieHub.PrincessTheatreClient;
 
-public interface IPrincessTheatreService
-{
-    Task<MovieResponse?> GetMovieResponse(FilmProvider filmProvider);
-}
-
 public class PrincessTheatreService : IPrincessTheatreService
 {
     private readonly HttpClient _httpClient;
