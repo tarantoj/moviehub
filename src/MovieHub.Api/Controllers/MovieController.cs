@@ -92,7 +92,9 @@ public class MovieController(
                 Director = movie.Director,
                 Genre = movie.Genre,
                 Rating = movie.Rating,
-                FilmWorldPrice = filmWorldPrices.Single(p => p.Id.Id == movie.PrincessTheatreMovieId).Price,
+                FilmWorldPrice = filmWorldPrices
+                    .Single(p => p.Id.Id == movie.PrincessTheatreMovieId)
+                    .Price,
                 CinemaWorldPrice = cinemaWorldPrices
                     .Single(p => p.Id.Id == movie.PrincessTheatreMovieId)
                     .Price

@@ -11,7 +11,10 @@ public class PrincessTheatreService : IPrincessTheatreService
     private readonly JsonSerializerOptions jsonSerializerOptions =
         new() { PropertyNameCaseInsensitive = true };
 
-    public PrincessTheatreService(HttpClient httpClient, IOptions<PrincessTheatreClientOptions> options)
+    public PrincessTheatreService(
+        HttpClient httpClient,
+        IOptions<PrincessTheatreClientOptions> options
+    )
     {
         _httpClient = httpClient;
         _httpClient.BaseAddress = options.Value.BaseAddress;

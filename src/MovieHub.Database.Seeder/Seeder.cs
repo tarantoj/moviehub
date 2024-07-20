@@ -6,10 +6,22 @@ public static class Seeder
     [
         new() { Name = "Cinemarvel", Location = "72 Bette McNee Street, Sandy Gully, NSW 2729" },
         new() { Name = "Moviemania", Location = "7 Old Tenterfield Road, Old Bonalbo, NSW 2469" },
-        new() { Name = "BigScreen Bliss", Location = "93 Creek Street, Kooralgin, Queensland 4402" },
+        new()
+        {
+            Name = "BigScreen Bliss",
+            Location = "93 Creek Street, Kooralgin, Queensland 4402"
+        },
         new() { Name = "CineNova", Location = "59 McLachlan Street, Nurcoung, Victoria 3401" },
-        new() { Name = "Cinema Royale", Location = "89 Nerrigundah Drive, Junction Village, Victoria 3977" },
-        new() { Name = "Flicker Factory", Location = "96 Sale-Heyfield Road, Kardella, Victoria 3951" },
+        new()
+        {
+            Name = "Cinema Royale",
+            Location = "89 Nerrigundah Drive, Junction Village, Victoria 3977"
+        },
+        new()
+        {
+            Name = "Flicker Factory",
+            Location = "96 Sale-Heyfield Road, Kardella, Victoria 3951"
+        },
         new() { Name = "CineSpectra", Location = "28 Reynolds Road, Lake Borumba, Queensland 4570" }
     ];
 

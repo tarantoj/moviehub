@@ -399,3 +399,6 @@ FodyWeavers.xsd
 
 # sqlite
 *.sqlite*
+
+# pre-commit
+.pre-commit-config.yaml

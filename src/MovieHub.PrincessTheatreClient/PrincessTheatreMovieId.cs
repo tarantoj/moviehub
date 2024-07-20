@@ -7,13 +7,11 @@ namespace MovieHub.PrincessTheatreClient;
 [JsonConverter(typeof(PrincessTheatreMovieIdConverter))]
 public readonly partial struct PrincessTheatreMovieId
 {
-
     public FilmProvider FilmProvider { get; }
     public string Id { get; }
 
     public PrincessTheatreMovieId(string princessTheatreMovieId)
     {
-
         var match = IdPattern().Match(princessTheatreMovieId);
 
         FilmProvider = FilmProviderFromString(match.Groups["FilmProvider"].Value);

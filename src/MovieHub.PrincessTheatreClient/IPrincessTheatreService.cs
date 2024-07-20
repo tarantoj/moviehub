@@ -4,4 +4,3 @@ public interface IPrincessTheatreService
 {
     Task<MovieResponse?> GetMovieResponse(FilmProvider filmProvider);
 }
-

@@ -18,7 +18,12 @@ namespace MovieHub.Database.Migrations
                     Id = table
                         .Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Score = table.Column<decimal>(type: "TEXT", precision: 4, scale: 2, nullable: false),
+                    Score = table.Column<decimal>(
+                        type: "TEXT",
+                        precision: 4,
+                        scale: 2,
+                        nullable: false
+                    ),
                     Comment = table.Column<string>(type: "TEXT", nullable: false),
                     ReviewDate = table.Column<DateTimeOffset>(type: "TEXT", nullable: false),
                     MovieId = table.Column<int>(type: "INTEGER", nullable: false)
@@ -36,7 +41,11 @@ namespace MovieHub.Database.Migrations
                 }
             );
 
-            migrationBuilder.CreateIndex(name: "IX_Reviews_MovieId", table: "Reviews", column: "MovieId");
+            migrationBuilder.CreateIndex(
+                name: "IX_Reviews_MovieId",
+                table: "Reviews",
+                column: "MovieId"
+            );
         }
 
         /// <inheritdoc />

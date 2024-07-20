@@ -90,9 +90,17 @@ namespace MovieHub.Database.Migrations
                 }
             );
 
-            migrationBuilder.CreateIndex(name: "IX_Showings_CinemaId", table: "Showings", column: "CinemaId");
+            migrationBuilder.CreateIndex(
+                name: "IX_Showings_CinemaId",
+                table: "Showings",
+                column: "CinemaId"
+            );
 
-            migrationBuilder.CreateIndex(name: "IX_Showings_MovieId", table: "Showings", column: "MovieId");
+            migrationBuilder.CreateIndex(
+                name: "IX_Showings_MovieId",
+                table: "Showings",
+                column: "MovieId"
+            );
         }
 
         /// <inheritdoc />
