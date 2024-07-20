@@ -19,5 +19,5 @@ public record MovieDetailsDto
     public decimal FilmWorldPrice { get; init; }
     public decimal CinemaWorldPrice { get; init; }
 
-    public IEnumerable<ShowingsDto> Showings { get; init; } = Enumerable.Empty<ShowingsDto>();
+    public IEnumerable<ShowingsDto> Showings { get; init; } = [];
 }
